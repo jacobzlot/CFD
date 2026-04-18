@@ -109,7 +109,6 @@ for i = 1:length(time)
     if i ~= length(time)
 
         % MacCormack Scheme - Predictor
-        % U~_i = U^t_i + dt*(J^t_i - dF/dx_backward) + S^t_i
         for j = 1:length(x)
             if j == 1
                 U_(j,1) = U(j,i,1) + time_step*(J(j,i,1) - (-3*F(j,i,1)+4*F(j+1,i,1)-F(j+2,i,1))/(2*dx)) + S(j,1);
@@ -200,7 +199,6 @@ for i = 1:length(time)
         end
 
         % MacCormack Scheme - Corrector
-        % U^{t+dt}_i = 0.5*(U^t_i + U~_i + dt*(J~_i - dF/dx_forward)) + S~_i
         for j = 1:length(x)
             if j == 1
                 U(j,i+1,1) = 0.5*(U(j,i,1)+U_(j,1) + time_step*(J_(j,1) - (-3*F_(j,1)+4*F_(j+1,1)-F_(j+2,1))/(2*dx)) + S_(j,1));
@@ -309,7 +307,7 @@ hold on
 plot(xa, ua, 'r--', 'LineWidth', 1.5)
 xlabel('x (m)')
 title('u (m/s)')
-legend('Viscous (Numerical)', 'Inviscid (Analytical)')
+legend('Viscous (Numerical)', 'Analytical (Inviscid)')
 
 subplot(222)
 plot(x, P(:,end), 'b-', 'LineWidth', 1.5)
@@ -317,7 +315,7 @@ hold on
 plot(xa, Pa, 'r--', 'LineWidth', 1.5)
 xlabel('x (m)')
 title('P (Pa)')
-legend('Viscous (Numerical)', 'Inviscid (Analytical)')
+legend('Viscous (Numerical)', 'Analytical (Inviscid)')
 
 subplot(223)
 plot(x, T(:,end), 'b-', 'LineWidth', 1.5)
@@ -333,9 +331,9 @@ hold on
 plot(xa, rhoa, 'r--', 'LineWidth', 1.5)
 xlabel('x (m)')
 title('\rho (kg/m^3)')
-legend('Viscous (Numerical)', 'Inviscid (Analytical)')
+legend('Viscous (Numerical)', 'Analytical (Inviscid)')
 
-sgtitle('Viscous (Numerical) vs Inviscid (Analytical) at t = 4 ms')
+sgtitle('Task 1: Viscous (Numerical) vs Analytical (Inviscid) at t = 4 ms')
 
 %% Task 2
 
@@ -431,7 +429,6 @@ for n = 1:length(Nx_list)
         if i ~= length(time)
 
             % MacCormack Scheme - Predictor
-            % U~_i = U^t_i + dt*(J^t_i - dF/dx_backward) + S^t_i
             for j = 1:N2
                 if j == 1
                     U2_(j,1) = U2(j,1) + time_step*(J2m(j,1) - (-3*F2(j,1)+4*F2(j+1,1)-F2(j+2,1))/(2*dx2)) + S2(j,1);
@@ -521,7 +518,6 @@ for n = 1:length(Nx_list)
             end
 
             % MacCormack Scheme - Corrector
-            % U^{t+dt}_i = 0.5*(U^t_i + U~_i + dt*(J~_i - dF/dx_forward)) + S~_i
             for j = 1:N2
                 if j == 1
                     U2(j,1) = 0.5*(U2(j,1)+U2_(j,1) + time_step*(J2_(j,1) - (-3*F2_(j,1)+4*F2_(j+1,1)-F2_(j+2,1))/(2*dx2))) + S2_(j,1);
@@ -566,7 +562,6 @@ for n = 1:length(Nx_list)
     res(n).P = P2c;
     res(n).T = T2c;
     res(n).Rho = Rho2c;
-    fprintf('  Done.\n');
 end
 
 %% Task 2 Plots
@@ -620,7 +615,7 @@ xlabel('x (m)')
 title('\rho (kg/m^3)')
 legend
 
-sgtitle('Grid Resolution Comparison at t = 4 ms')
+sgtitle('Task 2: Grid Resolution Comparison at t = 4 ms')
 
 %% Task 3
 
@@ -713,7 +708,6 @@ for oi = 1:2
         if i ~= length(time)
 
             % MacCormack Scheme - Predictor
-            % U~_i = U^t_i + dt*(J^t_i - dF/dx_backward) + S^t_i
             for j = 1:N3
                 for k = 1:3
                     if j == 1
@@ -846,7 +840,6 @@ for oi = 1:2
     ord_res(oi).P = P3c;
     ord_res(oi).T = T3c;
     ord_res(oi).Rho = Rho3c;
-    fprintf('  Done.\n');
 end
 
 %% Task 3 Plots
@@ -892,9 +885,9 @@ xlabel('x (m)')
 title('\rho (kg/m^3)')
 legend
 
-sgtitle('2nd-Order vs 4th-Order Scheme at Nx=101, t = 4 ms')
+sgtitle('Task 3: 2nd-Order vs 4th-Order Scheme, Nx=101, t = 4 ms')
 
-%% Report Requirement
+%% Report Requirement 1
 
 t_snap = [1e-3, 2e-3, 4e-3];
 snap_cols = round(t_snap/time_step) + 1;
@@ -945,7 +938,7 @@ ylabel('\rho (kg/m^3)')
 title('\rho (kg/m^3)')
 legend
 
-sgtitle('u, P, T, \rho vs x at t = 1, 2, 4 ms')
+sgtitle('P, \rho, u, T vs x at t = 1, 2, 4 ms')
 
 %% Smooth Function
 function T2 = smooth(T)
